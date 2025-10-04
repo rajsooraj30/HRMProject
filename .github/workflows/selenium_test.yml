@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          pip install --upgrade pytest pytest-html selenium
+          pip install --upgrade pytest pytest-html selenium webdriver_manager
 
       - name: Verify pytest installation
         run: |
