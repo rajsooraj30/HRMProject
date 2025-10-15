@@ -25,6 +25,30 @@ def browser_setup(request):
     request.cls.driver=webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()) , options=chromeOptions)
 
 
+@pytest.fixture(scope="class", autouse=True)
+def browser_setup(request):
+    # Chrome options
+    chromeOptions = Options()
+
+    # Run headless (important for Jenkins CI)
+    chromeOptions.add_argument("--headless")
+    chromeOptions.add_argument("--no-sandbox")
+    chromeOptions.add_argument("--disable-dev-shm-usage")
+
+    # Optional: detach for local debugging (ignored in headless CI)
+    chromeOptions.add_experimental_option("detach", True)
+
+    # Create ChromeDriver service with the correct driver version
+    service = ChromeService(ChromeDriverManager().install())
+
+    # Initialize driver
+    driver = webdriver.Chrome(service=service, options=chromeOptions)
+
+    # Assign to class for use in tests
+    request.cls.driver = driver
+
+
+
 @pytest.hookimpl(tryfirst=True)
 def pytest_configure(config):
     today= datetime.now()
