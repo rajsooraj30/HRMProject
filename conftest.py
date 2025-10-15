@@ -11,12 +11,19 @@ BaseUrl="https://opensource-demo.orangehrmlive.com/web/index.php/auth/login"
 user_name="Admin"
 password="admin123"
 
+# @pytest.fixture(scope="class",autouse=True)
+# def browser_setup(request):
+#     selenium_url = os.getenv("SELENIUM_REMOTE_URL", "http://localhost:4444/wd/hub")
+#     options = webdriver.ChromeOptions()
+#     request.cls.driver = webdriver.Remote(command_executor=selenium_url, options=options)
+#     #request.cls.driver=webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()) , options=options)
+
 @pytest.fixture(scope="class",autouse=True)
 def browser_setup(request):
-    selenium_url = os.getenv("SELENIUM_REMOTE_URL", "http://localhost:4444/wd/hub")
-    options = webdriver.ChromeOptions()
-    request.cls.driver = webdriver.Remote(command_executor=selenium_url, options=options)
-    #request.cls.driver=webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()) , options=options)
+    chromeOptions=Options()
+    chromeOptions.add_experimental_option("detach",True)
+    request.cls.driver=webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()) , options=chromeOptions)
+
 
 @pytest.hookimpl(tryfirst=True)
 def pytest_configure(config):
